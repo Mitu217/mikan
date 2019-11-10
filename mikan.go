@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	runeWidth = 30
+	runeWidth = 24
 )
 
 const (
