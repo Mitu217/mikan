@@ -1,4 +1,4 @@
-module github.com/mitu217/mikan.go
+module github.com/Mitu217/mikan
 
 go 1.13
 

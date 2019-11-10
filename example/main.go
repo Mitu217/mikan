@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	mikan "github.com/mitu217/mikan.go"
+	"github.com/Mitu217/mikan"
 )
 
 func main() {
