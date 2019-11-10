@@ -8,10 +8,8 @@ import (
 )
 
 const (
-	runeWidth = 24
-)
+	defaultRuneWidth = 80
 
-const (
 	joshis        = "でなければ|について|かしら|くらい|けれど|なのか|ばかり|ながら|ことよ|こそ|こと|さえ|しか|した|たり|だけ|だに|だの|つつ|ても|てよ|でも|とも|から|など|なり|ので|のに|ほど|まで|もの|やら|より|って|で|と|な|に|ね|の|も|は|ば|へ|や|わ|を|か|が|さ|し|ぞ|て"
 	keywords      = "[\\(（「『]+.*?[\\)）」』]|\\s+|[a-zA-Z0-9]+\\.[a-z]{2,}|[一-龠々〆ヵヶゝ]+|[ぁ-んゝ]+|[ァ-ヴー]+|[a-zA-Z0-9À-ÿ]+|[ａ-ｚＡ-Ｚ０-９]+"
 	periods       = "[\\.\\,。、！\\!？\\?]+"
@@ -19,24 +17,43 @@ const (
 	bracketsEnd   = "[〉》」』｣)）\\]】〕〗〙〛}>\\)❩❫❭❯❱❳❵｝]"
 	spaces        = "\\s"
 	hiraganas     = "[ぁ-んゝ]+"
+
+	typeKeywords      = "keywords"
+	typePeriods       = "periods"
+	typeBracketsBegin = "bracketsBegin"
+	typeBracketsEnd   = "bracketsEnd"
+	typeSpaces        = "spaces"
 )
 
-const (
-	TypeKeywords      = "keywords"
-	TypePeriods       = "periods"
-	TypeBracketsBegin = "bracketsBegin"
-	TypeBracketsEnd   = "bracketsEnd"
-	TypeSpaces        = "spaces"
-)
+type Option func(*Mikan)
 
-func Mikan(str string) []string {
+func RuneWidth(runeWidth int) Option {
+	return func(m *Mikan) {
+		m.RuneWidth = runeWidth
+	}
+}
+
+type Mikan struct {
+	RuneWidth int
+}
+
+func NewMikan(options ...Option) *Mikan {
+	m := &Mikan{
+		RuneWidth: defaultRuneWidth,
+	}
+	for _, option := range options {
+		option(m)
+	}
+	return m
+}
+
+func (m *Mikan) Do(str string) []string {
 	result := make([]string, 0)
-
 	words := Split(str)
 
 	line := ""
 	for _, word := range words {
-		if runewidth.StringWidth(line+word) > runeWidth {
+		if runewidth.StringWidth(line+word) > m.RuneWidth {
 			result = append(result, line)
 			line = word
 			continue
@@ -70,14 +87,14 @@ func Split(str string) []string {
 		spacesRep := regexp.MustCompile(spaces)
 		if spacesRep.MatchString(word) {
 			result = append(result, word)
-			prevType = TypeSpaces
+			prevType = typeSpaces
 			prevWord = word
 			continue
 		}
 
 		bracketsBeginRep := regexp.MustCompile(bracketsBegin)
 		if bracketsBeginRep.MatchString(word) {
-			prevType = TypeBracketsBegin
+			prevType = typeBracketsBegin
 			prevWord = word
 			continue
 		}
@@ -85,12 +102,12 @@ func Split(str string) []string {
 		bracketsEndRep := regexp.MustCompile(bracketsEnd)
 		if bracketsEndRep.MatchString(word) {
 			result[len(result)-1] += word
-			prevType = TypeBracketsEnd
+			prevType = typeBracketsEnd
 			prevWord = word
 			continue
 		}
 
-		if prevType == TypeBracketsBegin {
+		if prevType == typeBracketsBegin {
 			word = prevWord + word
 			prevWord = ""
 			prevType = ""
@@ -99,14 +116,14 @@ func Split(str string) []string {
 		// すでに文字が入っている上で助詞 or Periods or Spacesが続く場合は結合する
 		if len(result) > 0 && len(token) > 0 && prevType == "" {
 			result[len(result)-1] += word
-			prevType = TypeKeywords
+			prevType = typeKeywords
 			prevWord = word
 			continue
 		}
 
 		// 単語のあとの文字がひらがななら結合する
 		hiraganaRep := regexp.MustCompile(hiraganas)
-		if len(result) > 1 && len(token) > 0 || (prevType == TypeKeywords && hiraganaRep.MatchString(word)) {
+		if len(result) > 1 && len(token) > 0 || (prevType == typeKeywords && hiraganaRep.MatchString(word)) {
 			result[len(result)-1] += word
 			prevType = ""
 			prevWord = word
@@ -114,7 +131,7 @@ func Split(str string) []string {
 		}
 
 		result = append(result, word)
-		prevType = TypeKeywords
+		prevType = typeKeywords
 		prevWord = word
 	}
 
