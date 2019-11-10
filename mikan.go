@@ -1,10 +1,14 @@
 package mikan
 
 import (
-	"fmt"
-	"log"
 	"regexp"
 	"strings"
+
+	"github.com/mattn/go-runewidth"
+)
+
+const (
+	runeWidth = 30
 )
 
 const (
@@ -24,6 +28,27 @@ const (
 	TypeBracketsEnd   = "bracketsEnd"
 	TypeSpaces        = "spaces"
 )
+
+func Mikan(str string) []string {
+	result := make([]string, 0)
+
+	words := Split(str)
+
+	line := ""
+	for _, word := range words {
+		if runewidth.StringWidth(line+word) > runeWidth {
+			result = append(result, line)
+			line = word
+			continue
+		}
+		line += word
+	}
+	if line != "" {
+		result = append(result, line)
+	}
+
+	return result
+}
 
 func Split(str string) []string {
 	rules := []string{
