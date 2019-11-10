@@ -13,6 +13,8 @@ const (
 	periods       = "[\\.\\,。、！\\!？\\?]+"
 	bracketsBegin = "[〈《「『｢（(\\[【〔〚〖〘❮❬❪❨(<{❲❰｛❴]"
 	bracketsEnd   = "[〉》」』｣)）\\]】〕〗〙〛}>\\)❩❫❭❯❱❳❵｝]"
+	spaces        = "\\s"
+	hiraganas     = "[ぁ-んゝ]+"
 )
 
 const (
@@ -20,6 +22,7 @@ const (
 	TypePeriods       = "periods"
 	TypeBracketsBegin = "bracketsBegin"
 	TypeBracketsEnd   = "bracketsEnd"
+	TypeSpaces        = "spaces"
 )
 
 func Split(str string) []string {
@@ -28,6 +31,7 @@ func Split(str string) []string {
 		periods,
 		bracketsBegin,
 		bracketsEnd,
+		spaces,
 	}
 	rep := regexp.MustCompile(strings.Join(rules, "|"))
 	words := rep.FindAllString(str, -1)
@@ -37,6 +41,14 @@ func Split(str string) []string {
 	prevWord := ""
 	for _, word := range words {
 		token := getToken(word)
+
+		spacesRep := regexp.MustCompile(spaces)
+		if spacesRep.MatchString(word) {
+			result = append(result, word)
+			prevType = TypeSpaces
+			prevWord = word
+			continue
+		}
 
 		bracketsBeginRep := regexp.MustCompile(bracketsBegin)
 		if bracketsBeginRep.MatchString(word) {
@@ -59,9 +71,8 @@ func Split(str string) []string {
 			prevType = ""
 		}
 
-		// すでに文字が入っている上で助詞 or Periodsが続く場合は結合する
-		if len(result) > 0 && len(token) > 0 {
-			log.Println(prevType)
+		// すでに文字が入っている上で助詞 or Periods or Spacesが続く場合は結合する
+		if len(result) > 0 && len(token) > 0 && prevType == "" {
 			result[len(result)-1] += word
 			prevType = TypeKeywords
 			prevWord = word
@@ -69,7 +80,7 @@ func Split(str string) []string {
 		}
 
 		// 単語のあとの文字がひらがななら結合する
-		hiraganaRep := regexp.MustCompile("[ぁ-んゝ]+")
+		hiraganaRep := regexp.MustCompile(hiraganas)
 		if len(result) > 1 && len(token) > 0 || (prevType == TypeKeywords && hiraganaRep.MatchString(word)) {
 			result[len(result)-1] += word
 			prevType = ""
