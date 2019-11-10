@@ -25,18 +25,23 @@ const (
 	typeSpaces        = "spaces"
 )
 
+// Option sets the options specified
 type Option func(*Mikan)
 
+// RuneWidth sets rune width of line
 func RuneWidth(runeWidth int) Option {
 	return func(m *Mikan) {
 		m.RuneWidth = runeWidth
 	}
 }
 
+// Mikan is core struct
 type Mikan struct {
 	RuneWidth int
 }
 
+// NewMikan create Mikan instance
+// if you want Mikan's field, set options
 func NewMikan(options ...Option) *Mikan {
 	m := &Mikan{
 		RuneWidth: defaultRuneWidth,
@@ -47,9 +52,10 @@ func NewMikan(options ...Option) *Mikan {
 	return m
 }
 
-func (m *Mikan) Do(str string) []string {
+// Split returns strings that has been split to fit the runeWidth
+func (m *Mikan) Split(str string) []string {
 	result := make([]string, 0)
-	words := Split(str)
+	words := Analyze(str)
 
 	line := ""
 	for _, word := range words {
@@ -67,7 +73,8 @@ func (m *Mikan) Do(str string) []string {
 	return result
 }
 
-func Split(str string) []string {
+// Analyze returns the sentence divided into words
+func Analyze(str string) []string {
 	rules := []string{
 		keywords,
 		periods,
