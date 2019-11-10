@@ -116,7 +116,6 @@ func Analyze(str string) []string {
 
 		if prevType == typeBracketsBegin {
 			word = prevWord + word
-			prevWord = ""
 			prevType = ""
 		}
 
