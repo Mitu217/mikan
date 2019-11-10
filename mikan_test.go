@@ -5,6 +5,56 @@ import (
 	"testing"
 )
 
+func TestMikan_Split(t *testing.T) {
+	type fields struct {
+		RuneWidth int
+	}
+	type args struct {
+		str string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   []string
+	}{
+		{
+			name: "runeWidth: 26",
+			fields: fields{
+				RuneWidth: 26,
+			},
+			args: args{
+				str: "常に最新、最高のモバイル。Androidを開発した同じチームから。",
+			},
+			want: []string{
+				"常に最新、最高のモバイル。", "Androidを開発した同じ", "チームから。",
+			},
+		},
+		{
+			name: "runeWidth: 25",
+			fields: fields{
+				RuneWidth: 25,
+			},
+			args: args{
+				str: "常に最新、最高のモバイル。Androidを開発した同じチームから。",
+			},
+			want: []string{
+				"常に最新、最高の", "モバイル。Androidを", "開発した同じチームから。",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			m := &Mikan{
+				RuneWidth: tt.fields.RuneWidth,
+			}
+			if got := m.Split(tt.args.str); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Mikan.Split() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestAnalyze(t *testing.T) {
 	type args struct {
 		str string
