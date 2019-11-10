@@ -11,7 +11,7 @@ func main() {
 	mikan := mikan.NewMikan(
 		mikan.RuneWidth(30),
 	)
-	lines := mikan.Do("常に最新、最高のモバイル。<Android>を開発した同じチームから。")
+	lines := mikan.Split("常に最新、最高のモバイル。Androidを開発した同じチームから。")
 	fmt.Println(strings.Join(lines, "\n"))
 	/*
 		常に最新、最高のモバイル。
