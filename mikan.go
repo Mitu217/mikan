@@ -82,9 +82,6 @@ func Split(str string) []string {
 		prevWord = word
 	}
 
-	for _, v := range result {
-		fmt.Println(v)
-	}
 	return result
 }
 
