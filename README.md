@@ -6,8 +6,10 @@ mikan.go is [mikan.js](https://github.com/trkbt10/mikan.js) reimplemented with g
 
 ```golang
 func main() {
-	lines := mikan.Mikan("常に最新、最高のモバイル。<Android>を開発した同じチームから。")
-
+	mikan := mikan.NewMikan(
+		mikan.RuneWidth(30),
+	)
+	lines := mikan.Do("常に最新、最高のモバイル。<Android>を開発した同じチームから。")
 	fmt.Println(strings.Join(lines, "\n"))
 	/*
 		常に最新、最高のモバイル。
