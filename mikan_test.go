@@ -1,7 +1,6 @@
 package mikan
 
 import (
-	"log"
 	"reflect"
 	"testing"
 )
@@ -191,13 +190,19 @@ func TestAnalyze(t *testing.T) {
 				"㈱",
 			},
 		},
+		{
+			name: "include  ́",
+			args: args{
+				str: "mitu´s",
+			},
+			want: []string{
+				"mitu´s",
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := Analyze(tt.args.str); !reflect.DeepEqual(got, tt.want) {
-				for _, g := range got {
-					log.Println(g)
-				}
 				t.Errorf("Analyze() = %v, want %v", got, tt.want)
 			}
 		})
