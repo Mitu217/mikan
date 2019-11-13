@@ -151,7 +151,7 @@ func TestAnalyze(t *testing.T) {
 				str: "Hello & World",
 			},
 			want: []string{
-				"Hello", " &", " ", "World",
+				"Hello", " ", "&", " ", "World",
 			},
 		},
 		{
@@ -197,6 +197,24 @@ func TestAnalyze(t *testing.T) {
 			},
 			want: []string{
 				"mitu´s",
+			},
+		},
+		{
+			name: "support ~",
+			args: args{
+				str: "~test~",
+			},
+			want: []string{
+				"~", "test", "~",
+			},
+		},
+		{
+			name: "support 〜",
+			args: args{
+				str: "〜test〜",
+			},
+			want: []string{
+				"〜", "test", "〜",
 			},
 		},
 	}
