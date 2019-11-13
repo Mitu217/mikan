@@ -182,6 +182,15 @@ func TestAnalyze(t *testing.T) {
 				"(株)",
 			},
 		},
+		{
+			name: "support ㈱",
+			args: args{
+				str: "㈱",
+			},
+			want: []string{
+				"㈱",
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
