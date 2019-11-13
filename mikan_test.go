@@ -155,6 +155,24 @@ func TestAnalyze(t *testing.T) {
 				"Hello", " &", " ", "World",
 			},
 		},
+		{
+			name: "include -",
+			args: args{
+				str: "Hello-World",
+			},
+			want: []string{
+				"Hello-World",
+			},
+		},
+		{
+			name: "include ー",
+			args: args{
+				str: "HelloーWorld",
+			},
+			want: []string{
+				"HelloーWorld",
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
