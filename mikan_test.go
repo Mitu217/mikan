@@ -217,6 +217,15 @@ func TestAnalyze(t *testing.T) {
 				"〜", "test", "〜",
 			},
 		},
+		{
+			name: "support another ～",
+			args: args{
+				str: "～test～",
+			},
+			want: []string{
+				"～", "test", "～",
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
