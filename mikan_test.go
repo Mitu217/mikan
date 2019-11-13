@@ -127,6 +127,15 @@ func TestAnalyze(t *testing.T) {
 				"mitu's",
 			},
 		},
+		{
+			name: "include '’",
+			args: args{
+				str: "mitu’s",
+			},
+			want: []string{
+				"mitu’s",
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
