@@ -110,12 +110,21 @@ func TestAnalyze(t *testing.T) {
 			},
 		},
 		{
-			name: "inner '・'",
+			name: "include '・'",
 			args: args{
 				str: "ﾊﾛｰ・ﾜｰﾙﾄﾞ",
 			},
 			want: []string{
 				"ﾊﾛｰ・ﾜｰﾙﾄﾞ",
+			},
+		},
+		{
+			name: "include '''",
+			args: args{
+				str: "mitu's",
+			},
+			want: []string{
+				"mitu's",
 			},
 		},
 	}
