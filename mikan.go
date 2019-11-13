@@ -15,7 +15,7 @@ const (
 	periods       = "[\\.\\,。、！\\!？\\?]+"
 	bracketsBegin = "[〈《「『｢（(\\[【〔〚〖〘❮❬❪❨(<{❲❰｛❴]"
 	bracketsEnd   = "[〉》」』｣)）\\]】〕〗〙〛}>\\)❩❫❭❯❱❳❵｝]"
-	spaces        = "\\s"
+	spaces        = "[\\s　]+"
 	hiraganas     = "[ぁ-んゝ]+"
 
 	typeKeywords      = "keywords"

@@ -74,24 +74,6 @@ func TestAnalyze(t *testing.T) {
 			},
 		},
 		{
-			name: "hankana",
-			args: args{
-				str: "ﾊﾛｰﾜｰﾙﾄﾞ",
-			},
-			want: []string{
-				"ﾊﾛｰﾜｰﾙﾄﾞ",
-			},
-		},
-		{
-			name: "inner '・'",
-			args: args{
-				str: "ﾊﾛｰ・ﾜｰﾙﾄﾞ",
-			},
-			want: []string{
-				"ﾊﾛｰ・ﾜｰﾙﾄﾞ",
-			},
-		},
-		{
 			name: "english",
 			args: args{
 				str: "Always the latest and best mobile. From the same team that developed Android.",
@@ -107,6 +89,33 @@ func TestAnalyze(t *testing.T) {
 			},
 			want: []string{
 				"Toujours", " ", "le", " ", "dernier", " ", "et", " ", "le", " ", "meilleur", " ", "mobile.", " ", "De", " ", "la", " ", "même", " ", "équipe", " ", "qui", " ", "a", " ", "développé", " ", "Android.",
+			},
+		},
+		{
+			name: "hankana",
+			args: args{
+				str: "ﾊﾛｰﾜｰﾙﾄﾞ",
+			},
+			want: []string{
+				"ﾊﾛｰﾜｰﾙﾄﾞ",
+			},
+		},
+		{
+			name: "zenspace",
+			args: args{
+				str: "ハロー　ワールド",
+			},
+			want: []string{
+				"ハロー", "　", "ワールド",
+			},
+		},
+		{
+			name: "inner '・'",
+			args: args{
+				str: "ﾊﾛｰ・ﾜｰﾙﾄﾞ",
+			},
+			want: []string{
+				"ﾊﾛｰ・ﾜｰﾙﾄﾞ",
 			},
 		},
 	}
