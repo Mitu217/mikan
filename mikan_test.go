@@ -253,15 +253,6 @@ func TestAnalyze(t *testing.T) {
 				"cafѐ",
 			},
 		},
-		{
-			name: "support roman numerals",
-			args: args{
-				str: "Ⅰ",
-			},
-			want: []string{
-				"Ⅰ",
-			},
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
